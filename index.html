@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIS Executive Technical Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .test-info {
+            background: #f8f9ff;
+            padding: 25px;
+            border-left: 5px solid #4facfe;
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        .test-info h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .test-info ul {
+            list-style: none;
+            color: #666;
+        }
+
+        .test-info li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .test-info li:before {
+            content: "✓";
+            color: #4facfe;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .question-container {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .question-container:hover {
+            background: #f8f9ff;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 15px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 500;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .options {
+            margin: 20px 0;
+        }
+
+        .option {
+            display: block;
+            margin: 12px 0;
+            padding: 15px 20px;
+            background: #fff;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:hover {
+            border-color: #4facfe;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .controls {
+            padding: 30px;
+            text-align: center;
+            background: #f8f9ff;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(86, 171, 47, 0.4);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e1e5e9;
+            margin: 20px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+
+        .results {
+            padding: 40px;
+            text-align: center;
+            display: none;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .score-excellent {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+        }
+
+        .score-good {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .score-average {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+        }
+
+        .feedback {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.1em;
+        }
+
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .question-number {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="timer" id="timer">Time: 30:00</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>MIS Executive Technical Assessment</h1>
+            <p>Google Sheets & Google Apps Script Proficiency Test</p>
+        </div>
+
+        <div class="test-info">
+            <h3>Test Instructions</h3>
+            <ul>
+                <li>Total Questions: 25</li>
+                <li>Time Limit: 30 minutes</li>
+                <li>Passing Score: 60%</li>
+                <li>Each question carries equal marks</li>
+                <li>No negative marking</li>
+                <li>You can navigate between questions</li>
+            </ul>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <div id="questionArea">
+            <!-- Questions will be loaded here -->
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="prevBtn" onclick="changeQuestion(-1)" disabled>Previous</button>
+            <button class="btn btn-primary" id="nextBtn" onclick="changeQuestion(1)">Next</button>
+            <button class="btn btn-success" id="submitBtn" onclick="submitTest()" style="display: none;">Submit Test</button>
+        </div>
+
+        <div class="results" id="results">
+            <h2>Test Completed!</h2>
+            <div class="score-circle" id="scoreCircle">
+                <span id="scoreText">0%</span>
+            </div>
+            <div class="feedback" id="feedback"></div>
+            <button class="btn btn-primary" onclick="restartTest()">Retake Test</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the correct syntax to reference cell A1 in Google Apps Script?",
+                options: [
+                    "getRange('A1')",
+                    "getCell('A1')",
+                    "getCellA1()",
+                    "range('A1')"
+                ],
+                correct: 0
+            },
+            {
+                question: "Which function is used to get the active spreadsheet in Google Apps Script?",
+                options: [
+                    "SpreadsheetApp.getActiveSheet()",
+                    "SpreadsheetApp.getActiveSpreadsheet()",
+                    "SpreadsheetApp.getCurrentSpreadsheet()",
+                    "SpreadsheetApp.openSpreadsheet()"
+                ],
+                correct: 1
+            },
+            {
+                question: "What does the VLOOKUP function do in Google Sheets?",
+                options: [
+                    "Looks up values vertically in a table",
+                    "Validates data in cells",
+                    "Creates vertical charts",
+                    "Counts values in a column"
+                ],
+                correct: 0
+            },
+            {
+                question: "Which method is used to set a value in a cell using Google Apps Script?",
+                options: [
+                    "setValue()",
+                    "setCell()",
+                    "putValue()",
+                    "insertValue()"
+                ],
+                correct: 0
+            },
+            {
+                question: "What is the correct way to create a trigger in Google Apps Script?",
+                options: [
+                    "ScriptApp.newTrigger()",
+                    "TriggerApp.create()",
+                    "ScriptApp.createTrigger()",
+                    "Both A and C"
+                ],
+                correct: 3
+            },
+            {
+                question: "Which Google Sheets function is used to sum values based on criteria?",
+                options: [
+                    "SUM()",
+                    "SUMIF()",
+                    "CONDITIONAL_SUM()",
+                    "CRITERIA_SUM()"
+                ],
+                correct: 1
+            },
+            {
+                question: "In Google Apps Script, what does getLastRow() return?",
+                options: [
+                    "The last row with data",
+                    "The total number of rows",
+                    "The last empty row",
+                    "The maximum row number"
+                ],
+                correct: 0
+            },
+            {
+                question: "Which function combines text from multiple cells in Google Sheets?",
+                options: [
+                    "JOIN()",
+                    "COMBINE()",
+                    "CONCATENATE()",
+                    "MERGE()"
+                ],
+                correct: 2
+            },
+            {
+                question: "What is the purpose of onEdit() function in Google Apps Script?",
+                options: [
+                    "To edit spreadsheet properties",
+                    "To trigger actions when cells are edited",
+                    "To validate user input",
+                    "To format cells automatically"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which method is used to get values from a range in Google Apps Script?",
+                options: [
+                    "getValues()",
+                    "getRangeValues()",
+                    "extractValues()",
+                    "readValues()"
+                ],
+                correct: 0
+            },
+            {
+                question: "What does the INDEX function do in Google Sheets?",
+                options: [
+                    "Creates an index of data",
+                    "Returns a value from a specific position in a range",
+                    "Indexes spreadsheet pages",
+                    "Counts unique values"
+                ],
+                correct: 1
+            },
+            {
+                question: "In Google Apps Script, which service is used to send emails?",
+                options: [
+                    "EmailApp",
+                    "MailApp",
+                    "GmailApp",
+                    "Both B and C"
+                ],
+                correct: 3
+            },
+            {
+                question: "What is the maximum number of cells that can be imported using IMPORTRANGE?",
+                options: [
+                    "50,000",
+                    "100,000",
+                    "5,000,000",
+                    "10,000,000"
+                ],
+                correct: 2
+            },
+            {
+                question: "Which function is used to count non-empty cells in Google Sheets?",
+                options: [
+                    "COUNT()",
+                    "COUNTA()",
+                    "COUNTIF()",
+                    "COUNTNULL()"
+                ],
+                correct: 1
+            },
+            {
+                question: "In Google Apps Script, what does flush() do?",
+                options: [
+                    "Clears the spreadsheet",
+                    "Forces pending changes to be applied immediately",
+                    "Refreshes the browser",
+                    "Closes the spreadsheet"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which Google Sheets function returns the current date and time?",
+                options: [
+                    "TODAY()",
+                    "NOW()",
+                    "CURRENT()",
+                    "DATETIME()"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is the purpose of ARRAYFORMULA in Google Sheets?",
+                options: [
+                    "To create arrays",
+                    "To apply formulas to entire ranges at once",
+                    "To format arrays",
+                    "To validate array data"
+                ],
+                correct: 1
+            },
+            {
+                question: "In Google Apps Script, which method is used to create a new sheet?",
+                options: [
+                    "addSheet()",
+                    "insertSheet()",
+                    "createSheet()",
+                    "newSheet()"
+                ],
+                correct: 1
+            },
+            {
+                question: "What does the QUERY function do in Google Sheets?",
+                options: [
+                    "Asks questions about data",
+                    "Runs SQL-like queries on data",
+                    "Searches for specific values",
+                    "Creates database connections"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which Google Apps Script method is used to protect ranges?",
+                options: [
+                    "protect()",
+                    "lock()",
+                    "secure()",
+                    "restrict()"
+                ],
+                correct: 0
+            },
+            {
+                question: "What is the correct syntax for SUMIFS function in Google Sheets?",
+                options: [
+                    "SUMIFS(sum_range, criteria_range1, criteria1, criteria_range2, criteria2)",
+                    "SUMIFS(criteria_range1, criteria1, sum_range)",
+                    "SUMIFS(sum_range, criteria1, criteria2)",
+                    "SUMIFS(range, sum_criteria)"
+                ],
+                correct: 0
+            },
+            {
+                question: "In Google Apps Script, what does getRange('A1:B10') return?",
+                options: [
+                    "Values from A1 to B10",
+                    "A Range object representing A1 to B10",
+                    "The first cell A1",
+                    "An error"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which function removes leading and trailing spaces in Google Sheets?",
+                options: [
+                    "CLEAN()",
+                    "TRIM()",
+                    "STRIP()",
+                    "REMOVE_SPACES()"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is the purpose of Logger.log() in Google Apps Script?",
+                options: [
+                    "To create log files",
+                    "To debug and log information to the execution transcript",
+                    "To log user activities",
+                    "To create system logs"
+                ],
+                correct: 1
+            },
+            {
+                question: "Which Google Sheets feature allows you to automatically extend formulas and formatting?",
+                options: [
+                    "Auto-fill",
+                    "Smart Fill",
+                    "Auto-complete",
+                    "Formula extension"
+                ],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = new Array(questions.length).fill(null);
+        let timeLeft = 30 * 60; // 30 minutes in seconds
+        let timerInterval;
+
+        function initTest() {
+            startTimer();
+            displayQuestion();
+            updateProgress();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitTest();
+                }
+            }, 1000);
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `Time: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            const questionArea = document.getElementById('questionArea');
+            
+            questionArea.innerHTML = `
+                <div class="question-container">
+                    <div class="question-header">
+                        <div class="question-number">Q${currentQuestion + 1}</div>
+                        <div class="question-text">${question.question}</div>
+                    </div>
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <label class="option ${answers[currentQuestion] === index ? 'selected' : ''}" for="q${currentQuestion}_${index}">
+                                <input type="radio" name="q${currentQuestion}" id="q${currentQuestion}_${index}" value="${index}" 
+                                    ${answers[currentQuestion] === index ? 'checked' : ''} onchange="selectAnswer(${index})">
+                                ${String.fromCharCode(65 + index)}. ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').style.display = currentQuestion === questions.length - 1 ? 'none' : 'inline-block';
+            document.getElementById('submitBtn').style.display = currentQuestion === questions.length - 1 ? 'inline-block' : 'none';
+            
+            updateProgress();
+        }
+
+        function selectAnswer(optionIndex) {
+            answers[currentQuestion] = optionIndex;
+            // Update visual selection
+            document.querySelectorAll('.option').forEach(option => option.classList.remove('selected'));
+            document.querySelector(`label[for="q${currentQuestion}_${optionIndex}"]`).classList.add('selected');
+        }
+
+        function changeQuestion(direction) {
+            const newQuestion = currentQuestion + direction;
+            if (newQuestion >= 0 && newQuestion < questions.length) {
+                currentQuestion = newQuestion;
+                displayQuestion();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function submitTest() {
+            clearInterval(timerInterval);
+            
+            // Calculate score
+            let correctAnswers = 0;
+            answers.forEach((answer, index) => {
+                if (answer === questions[index].correct) {
+                    correctAnswers++;
+                }
+            });
+            
+            const score = Math.round((correctAnswers / questions.length) * 100);
+            
+            // Hide question area and show results
+            document.getElementById('questionArea').style.display = 'none';
+            document.querySelector('.controls').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            document.getElementById('timer').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            // Display results
+            const scoreCircle = document.getElementById('scoreCircle');
+            const scoreText = document.getElementById('scoreText');
+            const feedback = document.getElementById('feedback');
+            
+            scoreText.textContent = score + '%';
+            
+            if (score >= 80) {
+                scoreCircle.className = 'score-circle score-excellent';
+                feedback.innerHTML = `
+                    <h3 style="color: #56ab2f;">Excellent Performance!</h3>
+                    <p>Outstanding knowledge of Google Sheets and Apps Script. You're well-qualified for MIS Executive roles.</p>
+                    <p>Correct Answers: ${correctAnswers} out of ${questions.length}</p>
+                `;
+            } else if (score >= 60) {
+                scoreCircle.className = 'score-circle score-good';
+                feedback.innerHTML = `
+                    <h3 style="color: #f5576c;">Good Performance!</h3>
+                    <p>Solid understanding of the concepts. Consider reviewing some advanced topics.</p>
+                    <p>Correct Answers: ${correctAnswers} out of ${questions.length}</p>
+                `;
+            } else {
+                scoreCircle.className = 'score-circle score-average';
+                feedback.innerHTML = `
+                    <h3 style="color: #fc8c47;">Needs Improvement</h3>
+                    <p>Focus on strengthening your Google Sheets and Apps Script fundamentals.</p>
+                    <p>Correct Answers: ${correctAnswers} out of ${questions.length}</p>
+                `;
+            }
+        }
+
+        function restartTest() {
+            currentQuestion = 0;
+            answers = new Array(questions.length).fill(null);
+            timeLeft = 30 * 60;
+            
+            document.getElementById('questionArea').style.display = 'block';
+            document.querySelector('.controls').style.display = 'block';
+            document.querySelector('.progress-bar').style.display = 'block';
+            document.getElementById('timer').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            
+            initTest();
+        }
+
+        // Initialize test when page loads
+        window.onload = initTest;
+    </script>
+</body>
+</html>
+Commit new file
